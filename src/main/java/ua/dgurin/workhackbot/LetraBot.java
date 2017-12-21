@@ -280,7 +280,7 @@ public class LetraBot extends TelegramLongPollingBot {
 
 
     public String getBotToken() {
-        return "480766557:AAFOnZkAdsONVoPAF057renTq5sPArPBeJo";
+        return "";
     }
 
 }

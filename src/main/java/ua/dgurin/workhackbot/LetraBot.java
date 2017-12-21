@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.System.exit;
+import static java.lang.Thread.sleep;
+
 /**
  * @author Danylo_Hurin.
  */
@@ -24,11 +27,10 @@ public class LetraBot extends TelegramLongPollingBot {
 
     private static final String email = "your.email.here@gmail.com";
 
-    private static final String hello = "Привет! Я Work Hack Бот. Я могу помочь с ответом на вопрос по трудовому праву." +
-            " Я могу быть полезен тебе если в данный момент ты работаешь, ищешь работу или увольняешься." +
-            " Просто выбери необходимый раздел из списка. Если ты не нашёл ответа на свой вопрос, обращайся пожалуйста сюда " + email + " ." +
-            " Я постоянно совершенствуюсь и буду рад за обратную связь _______." +
-            " Если ты готов, нажми «СТАРТ»";
+    private static final String hello = "«Привет! Я Letra Бот. Я знаю юридический английский. Я могу быть полезен тебе, если ты сомневаешься в\n" +
+            "значения слов, учишь юридический английский. Просто выбери необходимый раздел из списка. Если ты не\n" +
+            "нашёл ответа на свой вопрос, обращайся сюда " + email + ". Я постоянно совершенствуюсь и буду рад за\n" +
+            "обратную связь _______. Если ты готов, нажми «СТАРТ».»";
 
     private static final String commandStart = "/start";
     private static final String commandChooseVocabulary = "/choose";
@@ -46,7 +48,8 @@ public class LetraBot extends TelegramLongPollingBot {
 
     public static void main(String[] args) {
 
-        vocabulary = fillVocabulary("/code/WorkHackBot/vocabularyCommon.csv");
+        vocabulary = fillVocabulary(LetraBotData.common);
+//        vocabulary = fillVocabulary("/code/WorkHackBot/vocabularyCommon.csv");
         vocabulary2 = fillVocabulary2();
 
         // Initialize Api Context
@@ -58,16 +61,23 @@ public class LetraBot extends TelegramLongPollingBot {
         // Register our bot
         try {
             botsApi.registerBot(new LetraBot());
-        } catch (TelegramApiException e) {
+            botsApi.registerBot(new WorkHackBot());
+        } catch (Throwable e) {
             e.printStackTrace();
+            exit(1);
         }
+
+        System.out.println("EVERYTHING IS OK!");
     }
 
     private static Map<String, Map<String, WordDefinition>> fillVocabulary2() {
         Map<String, Map<String, WordDefinition>> vocabulary = new HashMap<String, Map<String, WordDefinition>>();
-        String csvCriminal = "/code/WorkHackBot/vocabularyCriminal.csv";
-        String csvDeal = "/code/WorkHackBot/vocabularyDeal.csv";
-        String csvCommon = "/code/WorkHackBot/vocabularyCommon.csv";
+        String csvCriminal = LetraBotData.criminal;
+        String csvDeal = LetraBotData.deal;
+        String csvCommon = LetraBotData.common;
+//        String csvCriminal = "/code/WorkHackBot/vocabularyCriminal.csv";
+//        String csvDeal = "/code/WorkHackBot/vocabularyDeal.csv";
+//        String csvCommon = "/code/WorkHackBot/vocabularyCommon.csv";
 
         Map<String, WordDefinition> criminal = fillVocabulary(csvCriminal);
         vocabulary.put(catCriminal, criminal);
@@ -85,11 +95,12 @@ public class LetraBot extends TelegramLongPollingBot {
     private static Map<String, WordDefinition> fillVocabulary(String csvFile) {
 
         Map<String, WordDefinition> vocabulary = new HashMap<String, WordDefinition>();
-        String line = "";
+//        String line = "";
         String cvsSplitBy = "\\*";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            while ((line = br.readLine()) != null) {
+//        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            for (String line : csvFile.split("\n")) {
+//            while ((line = br.readLine()) != null) {
                 // use comma as separator
                 System.out.println("-> " + line);
                 String[] definition = line.split(cvsSplitBy);
@@ -111,16 +122,16 @@ public class LetraBot extends TelegramLongPollingBot {
                 vocabulary.put(d.getWord(), d);
                 System.out.println(d);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return vocabulary;
     }
 
     public void onUpdateReceived(Update update) {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String message_text = update.getMessage().getText().trim();
+            String message_text = update.getMessage().getText().trim().toLowerCase();
             long chat_id = update.getMessage().getChatId();
 
             if (message_text.equals(commandStart)) {
@@ -130,7 +141,7 @@ public class LetraBot extends TelegramLongPollingBot {
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rowsInline = new ArrayList<List<InlineKeyboardButton>>();
                 List<InlineKeyboardButton> rowInline = new ArrayList<InlineKeyboardButton>();
-                rowInline.add(new InlineKeyboardButton().setText("START").setCallbackData(helloCallback));
+                rowInline.add(new InlineKeyboardButton().setText("СТАРТ").setCallbackData(helloCallback));
                 // Set the keyboard to the markup
                 rowsInline.add(rowInline);
                 // Add it to the message
@@ -155,7 +166,7 @@ public class LetraBot extends TelegramLongPollingBot {
                     }
                     if (!wasSent) {
                         SendMessage message = new SendMessage().setChatId(chat_id);
-                        message.setText("Couldn't find word '" + message_text);
+                        message.setText("Слово '" + message_text + "' не найдено");
                         send(message);
                     }
                 } else {
@@ -176,27 +187,28 @@ public class LetraBot extends TelegramLongPollingBot {
                 currentCategory = catDeal;
                 SendMessage message = new SendMessage() // Create a message object object
                         .setChatId(chat_id)
-                        .setText("Searching in " + catDeal);
+                        .setText("Поиск в словаре \"Договорне право\"");
                 send(message);
             } else if (call_data.equals(catCriminal)) {
                 currentCategory = catCriminal;
                 SendMessage message = new SendMessage() // Create a message object object
                         .setChatId(chat_id)
-                        .setText("Searching in " + catCriminal);
+                        .setText("Пошук в словаре \"Криминальне право\"");
                 send(message);
             } else if (call_data.equals(catCommon)) {
                 currentCategory = catCommon;
                 SendMessage message = new SendMessage() // Create a message object object
                         .setChatId(chat_id)
-                        .setText("Searching in " + catCommon);
+                        .setText("Поиск в словаре \"Общие термины\"");
                 send(message);
             } else if (call_data.equals(catAll)) {
                 currentCategory = "";
                 SendMessage message = new SendMessage() // Create a message object object
                         .setChatId(chat_id)
-                        .setText("Searching in everywhere...");
+                        .setText("Поиск везде...");
                 send(message);
             }
+
         }
     }
 
@@ -212,10 +224,10 @@ public class LetraBot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> rowInline2 = new ArrayList<InlineKeyboardButton>();
         List<InlineKeyboardButton> rowInline3 = new ArrayList<InlineKeyboardButton>();
         List<InlineKeyboardButton> rowInline4 = new ArrayList<InlineKeyboardButton>();
-        rowInline1.add(new InlineKeyboardButton().setText(catDeal).setCallbackData(catDeal));
-        rowInline2.add(new InlineKeyboardButton().setText(catCriminal).setCallbackData(catCriminal));
-        rowInline3.add(new InlineKeyboardButton().setText(catCommon).setCallbackData(catCommon));
-        rowInline4.add(new InlineKeyboardButton().setText(catAll).setCallbackData(catAll));
+        rowInline1.add(new InlineKeyboardButton().setText("Договорне право").setCallbackData(catDeal));
+        rowInline2.add(new InlineKeyboardButton().setText("Криминальне право").setCallbackData(catCriminal));
+        rowInline3.add(new InlineKeyboardButton().setText("Общие термины").setCallbackData(catCommon));
+        rowInline4.add(new InlineKeyboardButton().setText("Поиск везде").setCallbackData(catAll));
         rowsInline.add(rowInline1);
         rowsInline.add(rowInline2);
         rowsInline.add(rowInline3);
@@ -245,7 +257,7 @@ public class LetraBot extends TelegramLongPollingBot {
             wasSent = true;
         } else {
             if (sendNotFound) {
-                message.setText("Couldn't find word '" + message_text + "' in vocabulary");
+                message.setText("Слово '" + message_text + "' не найдено");
                 send(message);
             }
 

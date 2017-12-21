@@ -6,14 +6,20 @@ package ua.dgurin.workhackbot;
 public class LetraBotData {
 
     public static String criminal = "" +
-            "liquidation*(from the verb to liquidate. Often used in the expression to go into liquidation: The company went into liquidation when it was declared insolvent)*empty*The closing of a company and the selling of its assets.*empty*\n" +
-            "eligible *All shareholders are eligible to vote at the Annual General Meeting. (able or allowed to do something)*\"- имеющий право (на что-л. в силу соответствия определенным требованиям); eligible for membership — имеющий право стать членом\"*\n";
+            "" +
+            "accuse*To say that someone has committed a crime. совершил преступление.*(обвинять) falsely accuse – ложно обвинять, publicly accuse – публично обвинить*\n" +
+            "arrest*To hold someone legally so as to charge them with a crime.*Удерживать кого-то легально так как для предъявления обвинения в совершении преступления.*\n" +
+            "claimant*A person who makes a claim against someone in a civil court. предъявляет иск к кому-то в гражданском суде*Истец заявитель, претендент, взыскатель, проситель ) ( лицо, предъявляющее право, претензию или требование; истец, заявитель)*\n" +
+            "commit*To send someone to prison or to a court.*скоїти (частіше вживається в поганому значенні)* He was found guilty and committed.\n" +
+            "convict*To find that someone is guilty of a crime. second conviction — повторная судимость to be open to conviction — быть непредубежденным conviction of offence — осуждение за преступление*((судебное) следствие; судебное разбирательство; суд; слушание дела;судебный процесс; слушание дела по существу) criminal conviction — осуждение в уголовном порядке ; it was her third conviction — это ее третья судимость*\n";
 
     public static String deal = "" +
-            "liquidation*(from the verb to liquidate. Often used in the expression to go into liquidation: The company went into liquidation when it was declared insolvent)*empty*The closing of a company and the selling of its assets.*empty*\n" +
-            "eligible *All shareholders are eligible to vote at the Annual General Meeting. (able or allowed to do something)*\"- имеющий право (на что-л. в силу соответствия определенным требованиям); eligible for membership — имеющий право стать членом\"*\n";
+            "liability*The legal responsibility for paying someone for loss or damage incurred.*денежные обязательства *(you can accept, admit or refuse liability for something. A company's articles of association should include a liability clause, which states that the liability of its members is limited. The liability of an employer for acts committed by an employee during the course of work is called vicarious liability)\n" +
+            "damages*a sum of money claimed or awarded in compensation for a loss or an injury.*за нанесенный ущерб*Money claimed by someone as compensation for harm done.\n" +
+            "breach*Failure to carry out the terms of an agreement, a contract, etc. *Невыполнение условий договора.*(common collocations of this word include: a breach of confidence, a breach of contract, a breach of promise, a breach of the peace, a breach of trust, a breach of warranty. It is also used with in + of: We are in breach of Community law; The defendant is in breach of his statutory duty, etc)";
 
     public static String common = "" +
+            "damages*physical harm that impairs the value, usefulness, or normal function of something*расходы, которые лицо, чье право нарушено, произвело или должно будет произвести для восстановления нарушенного права, утрата или повреждение его имущества*bombing caused extensive damage to the town.\n" +
             "liquidation*(from the verb to liquidate. Often used in the expression to go into liquidation: The company went into liquidation when it was declared insolvent)*empty*The closing of a company and the selling of its assets.*empty*\n" +
             "eligible *All shareholders are eligible to vote at the Annual General Meeting. (able or allowed to do something)*\"- имеющий право (на что-л. в силу соответствия определенным требованиям); eligible for membership — имеющий право стать членом\"*\n" +
             "admissible *The documents produced were not considered relevant to the case and were therefore not admissible. *- могущий быть принятым (в качестве доказательства и т. п.) (referring to evidence which a court will allow to be used)*\n" +
